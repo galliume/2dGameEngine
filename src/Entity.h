@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 #include "./EntityManager.h"
 #include "./Component.h"
 
@@ -14,6 +15,7 @@ class Entity {
         EntityManager& manager;
         bool isActive;
         std::vector<Component*> components;
+        std::map<const std::type_info*, Component*> componentTypeMap;
     public:
         std::string name;
         Entity(EntityManager& manager);
@@ -22,6 +24,7 @@ class Entity {
         void Render();
         void Destroy();
         bool IsActive() const;
+        void ListAllComponents() const;
 
         template <typename T, typename... TArgs>
         T& AddComponent(TArgs&&... args) {
@@ -29,6 +32,7 @@ class Entity {
             newComponent->owner = this;
             components.emplace_back(newComponent);
             newComponent->Initialize();
+            componentTypeMap[&typeid(*newComponent)] = newComponent;
 
             return *newComponent;
         }

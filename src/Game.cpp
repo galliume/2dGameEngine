@@ -55,10 +55,17 @@ void Game::Initialize(int width, int height) {
 }
 
 void Game::LoadLevel(int levelNumber) {
-    Entity& newEntity(manager.AddEntity("projectile"));
 
+    Entity& newEntity(manager.AddEntity("projectile"));
     newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
 
+    Entity& newEntity2(manager.AddEntity("projectile2"));
+    newEntity2.AddComponent<TransformComponent>(10, 25, 10, 5, 3, 3, 1);
+
+    Entity& newEntity3(manager.AddEntity("projectile2"));
+    newEntity3.AddComponent<TransformComponent>(400, 256, -10, -5, 10, 10, 1);    
+
+    manager.ListAllEntities();
 }
 
 void Game::ProcessInput() {
