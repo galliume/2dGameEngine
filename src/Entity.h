@@ -36,6 +36,11 @@ class Entity {
 
             return *newComponent;
         }
+
+        template <typename T>
+        T* GetComponent() {
+            return static_cast<T*>(componentTypeMap[&typeid(T)]);
+        }
 };
 
 #endif
