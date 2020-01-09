@@ -41,6 +41,12 @@ class Entity {
         T* GetComponent() {
             return static_cast<T*>(componentTypeMap[&typeid(T)]);
         }
+
+        /*
+        template <typename T>
+        bool HasComponent() const {
+            return componentTypeMap.contains(T*);
+        }*/
 };
 
 #endif
