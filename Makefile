@@ -1,7 +1,7 @@
 build:
 	g++ -w -std=c++14 -Wfatal-errors \
 	./src/*.cpp \
-	-o game.exe \
+	-o 2dgameengine.exe \
 	-I"C:\Users\Guillaume\Documents\workspace\libsdl\SDL2\include" \
 	-L"C:\Users\Guillaume\Documents\workspace\libsdl\SDL2\lib" \
 	-I".\lib\lua" \
@@ -15,7 +15,7 @@ build:
 	-lSDL2
 
 clean:
-	del game.exe
+	del 2dgameengine.exe
 
 run:
-	game.exe
+	2dgameengine.exe
