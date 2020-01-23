@@ -47,23 +47,23 @@ class KeyboardControlComponent: public Component {
                 std::string keyCode = std::to_string(Game::event.key.keysym.sym);
                 std::cout << " KEY CODE " << keyCode << " " << " upkey " << upKey << " " << keyCode.compare(upKey) << std::endl;
                 if (keyCode.compare(upKey) == 0) {
-                    transform->velocity.y = -1;
+                    transform->velocity.y = -10;
                     transform->velocity.x = 0;
 
                     sprite->Play("UpAnimation");
                 } else if (keyCode.compare(downKey) == 0) {
-                    transform->velocity.y = 1;
+                    transform->velocity.y = 10;
                     transform->velocity.x = 0;
 
                     sprite->Play("DownAnimation");                
                 } else if (keyCode.compare(rightKey) == 0) {
                     transform->velocity.y = 0;
-                    transform->velocity.x = 1;
+                    transform->velocity.x = 10;
 
                     sprite->Play("RightAnimation");
                 } else if (keyCode.compare(leftKey) == 0) {
                     transform->velocity.y = 0;
-                    transform->velocity.x = -1;
+                    transform->velocity.x = -10;
 
                     sprite->Play("LeftAnimation");
                 } else if (keyCode.compare(shootKey) == 0) {

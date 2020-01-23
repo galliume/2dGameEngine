@@ -1,21 +1,17 @@
 build:
 	g++ -w -std=c++14 -Wfatal-errors \
 	./src/*.cpp \
-	-o 2dgameengine.exe \
-	-I"C:\Users\Guillaume\Documents\workspace\libsdl\SDL2\include" \
-	-L"C:\Users\Guillaume\Documents\workspace\libsdl\SDL2\lib" \
-	-I".\lib\lua" \
-	-L".\lib\lua" \
-	-llua53 \
-	-lmingw32 \
-	-lSDL2main \
+	-o game \
+	-I"./lib/lua" \
+	-L"./lib/lua" \
+	-llua5.3 \
+	-lSDL2 \
 	-lSDL2_image \
 	-lSDL2_ttf \
-	-lSDL2_mixer \
-	-lSDL2
+	-lSDL2_mixer;
 
 clean:
-	del 2dgameengine.exe
+	rm ./game;
 
 run:
-	2dgameengine.exe
+	./game;
