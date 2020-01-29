@@ -44,11 +44,10 @@ class Entity {
             return static_cast<T*>(componentTypeMap[&typeid(T)]);
         }
 
-        /*
         template <typename T>
         bool HasComponent() const {
-            return componentTypeMap.contains(T*);
-        }*/
+            return componentTypeMap.count(&typeid(T));
+        }
 };
 
 #endif
