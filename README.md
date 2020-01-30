@@ -1,4 +1,4 @@
-# 2dGameEngines exercices from 
+# 2dGameEngine exercices from 
 
 https://www.udemy.com/course/cpp-2d-game-engine/
 
