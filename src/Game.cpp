@@ -70,6 +70,8 @@ void Game::LoadLevel(int levelNumber) {
     assetManager->AddTexture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());    
     assetManager->AddTexture("radar-image", std::string("./assets/images/radar.png").c_str());    
     assetManager->AddTexture("jungle-tiletexture", std::string("./assets/tilemaps/jungle.png").c_str());    
+    assetManager->AddTexture("collision-texture", std::string("./assets/images/collision-texture.png").c_str());    
+    assetManager->AddTexture("heliport-image", std::string("./assets/images/heliport.png").c_str());    
 
     map = new Map("jungle-tiletexture", 2, 32);
     map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
@@ -77,16 +79,21 @@ void Game::LoadLevel(int levelNumber) {
     player.AddComponent<TransformComponent>(200, 321, 0, 0, 32, 32, 1);
     player.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
     player.AddComponent<KeyboardControlComponent>("up", "down", "left", "right", "space");
-    player.AddComponent<ColliderComponent>("player", 200, 321, 32, 32);
+    player.AddComponent<ColliderComponent>("PLAYER", 200, 321, 32, 32);
 
     Entity& tankEntity(manager.AddEntity("tank", ENEMY_LAYER));
     tankEntity.AddComponent<TransformComponent>(150, 495, 5, 0, 32, 32, 1);
     tankEntity.AddComponent<SpriteComponent>("tank-image");
-    tankEntity.AddComponent<ColliderComponent>("enemy", 150, 495, 32, 32);
+    tankEntity.AddComponent<ColliderComponent>("ENEMY", 150, 495, 32, 32);
 
     Entity& radarEntity(manager.AddEntity("radar", UI_LAYER));
     radarEntity.AddComponent<TransformComponent>(720, 20, 0, 0, 64, 64, 1);
     radarEntity.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
+
+    Entity& heliport(manager.AddEntity("heliport", OBSTACLE_LAYER));
+    heliport.AddComponent<TransformComponent>(420, 420, 0, 0, 32, 32, 1);
+    heliport.AddComponent<SpriteComponent>("heliport-image");
+    heliport.AddComponent<ColliderComponent>("LEVEL_COMPLETE", 470, 420, 32, 32);
 
     manager.ListAllEntities();
 }
@@ -162,9 +169,23 @@ void Game::HandleCameraMovement() {
 }
 
 void Game::CheckCollisions() {
-    std::string collisionTagType = manager.CheckEntityCollisions(player);
+    CollisionType collisionType = manager.CheckEntityCollisions();
 
-    if (collisionTagType.compare("enemy") == 0) {
-        isRunning = false;
+    if (collisionType == PLAYER_ENEMY_COLLISION) {
+        ProcessGameOver();
     }
+
+    if (collisionType == PLAYER_LEVEL_COMPLETE_COLLISION) {
+        ProcessNextLevel(1);
+    }    
+}
+
+void Game::ProcessNextLevel(int levelNumber) {
+    std::cout << "Next level" << std::endl;
+    isRunning = false;
+}
+
+void Game::ProcessGameOver() {
+    std::cout << "Game Over" << std::endl;
+    isRunning = false;
 }

@@ -5,6 +5,7 @@
 #include  "../Game.h"
 #include "../EntityManager.h"
 #include "./TransformComponent.h"
+#include "./SpriteComponent.h"
 
 class ColliderComponent: public Component {
     public:
@@ -25,6 +26,8 @@ class ColliderComponent: public Component {
                 sourceRect = {0, 0, transform->width, transform->height};
                 destinationRect = {collider.x, collider.y, collider.w, collider.h};
             }
+            
+            owner->AddComponent<SpriteComponent>("collision-texture", 1, 1, false, false);
         }
 
         void Update(float deltaTime) override {
