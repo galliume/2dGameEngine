@@ -3,7 +3,7 @@
 #include "./Map.h"
 #include "./EntityManager.h"
 #include "./components/TileComponent.h"
-
+#include <iostream>
 extern EntityManager manager;
 
 Map::Map(std::string textureId, int scale, int tileSize) {
@@ -15,7 +15,7 @@ Map::Map(std::string textureId, int scale, int tileSize) {
 void Map::LoadMap(std::string filePath, int mapSizeX, int mapSizeY) {
     std::fstream mapFile;
     mapFile.open(filePath);
-
+    std::cout << mapSizeX << " " << mapSizeY << std::endl;
     for (int y = 0; y < mapSizeY; y++) {
         for (int x = 0; x < mapSizeX; x++) {
             char ch;

@@ -63,7 +63,7 @@ void Game::Initialize(int width, int height) {
         return;
     }
 
-    LoadLevel(0);
+    LoadLevel(1);
 
     isRunning = true;
 
@@ -73,6 +73,51 @@ void Game::Initialize(int width, int height) {
 Entity& player(manager.AddEntity("chopper", PLAYER_LAYER));
 
 void Game::LoadLevel(int levelNumber) {
+
+    sol::state lua;
+    lua.open_libraries(sol::lib::base, sol::lib::os, sol::lib::math);
+    
+    std::string levelName = "Level" + std::to_string(levelNumber);
+    lua.script_file("./assets/scripts/" + levelName + ".lua");
+
+    sol::table levelData = lua[levelName];
+    sol::table levelAssets = levelData["assets"];
+
+    unsigned int assetIndex = 0;
+
+    while (true) {
+        sol::optional<sol::table> existsAssetIndexNode = levelAssets[assetIndex];
+        if  (existsAssetIndexNode == sol::nullopt) {
+            std::cout << "oups" << std::endl;
+            break;
+        } else {
+            sol::table asset = levelAssets[assetIndex];
+            std::string assetType = asset["type"];
+            std::cout << assetType << std::endl;
+            if (assetType.compare("texture") == 0) {
+                std::string assetId = asset["id"];
+                std::string assetFile = asset["file"];
+                std::cout << assetFile << std::endl;
+                assetManager->AddTexture(assetId, assetFile.c_str());
+            }
+        }
+
+        assetIndex++;
+    }
+
+    sol::table levelMap = levelData["map"];
+    std::string mapTextureId = levelMap["textureAssetId"];
+    std::string mapFile = levelMap["file"];
+
+    map = new Map(mapTextureId, static_cast<int>(levelMap["scale"]), static_cast<int>(levelMap["tileSize"]));
+    map->LoadMap(mapFile, static_cast<int>(levelMap["mapSizeX"]), static_cast<int>(levelMap["mapSizeY"]));
+
+    player.AddComponent<TransformComponent>(200, 321, 0, 0, 32, 32, 1);
+    player.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
+    player.AddComponent<KeyboardControlComponent>("up", "down", "left", "right", "space");
+    player.AddComponent<ColliderComponent>("PLAYER", 200, 321, 32, 32);
+
+    /* 
     assetManager->AddTexture("tank-image", std::string("./assets/images/tank-big-right.png").c_str());
     assetManager->AddTexture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());    
     assetManager->AddTexture("radar-image", std::string("./assets/images/radar.png").c_str());    
@@ -85,10 +130,7 @@ void Game::LoadLevel(int levelNumber) {
     map = new Map("jungle-tiletexture", 2, 32);
     map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
 
-    player.AddComponent<TransformComponent>(200, 321, 0, 0, 32, 32, 1);
-    player.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
-    player.AddComponent<KeyboardControlComponent>("up", "down", "left", "right", "space");
-    player.AddComponent<ColliderComponent>("PLAYER", 200, 321, 32, 32);
+
 
     Entity& tankEntity(manager.AddEntity("tank", ENEMY_LAYER));
     tankEntity.AddComponent<TransformComponent>(150, 495, 5, 0, 32, 32, 1);
@@ -112,8 +154,9 @@ void Game::LoadLevel(int levelNumber) {
 
     Entity& labelLvlName(manager.AddEntity("LabelLvlName", UI_LAYER));
     labelLvlName.AddComponent<TextLabelComponent>(10, 10, "First level", "charriot-font", WHITE_COLOR);
+    */
 
-    manager.ListAllEntities();
+    //manager.ListAllEntities();
 }
 
 void Game::ProcessInput() {
